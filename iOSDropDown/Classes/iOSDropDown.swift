@@ -401,8 +401,8 @@ extension DropDown: UITableViewDataSource {
         cell!.selectionStyle = .none
         cell?.textLabel?.font = self.font
         cell?.textLabel?.textAlignment = self.textAlignment
-        cell?.textLabel?.numberOfLines = 0
-        cell?.textLabel?.lineBreakMode = .byWrodWrapping
+        
+        cell?.textLabel?.textColor = (indexPath.row == selectedIndex) ? .white : .black;
         return cell!
     }
 }
@@ -412,6 +412,7 @@ extension DropDown: UITableViewDelegate {
         selectedIndex = (indexPath as NSIndexPath).row
         let selectedText = self.dataArray[self.selectedIndex!]
         tableView.cellForRow(at: indexPath)?.alpha = 0
+        tableView.cellForRow(at: indexPath)?.textLabel?.textColor = .white;
         UIView.animate(withDuration: 0.5,
                        animations: { () -> Void in
                         tableView.cellForRow(at: indexPath)?.alpha = 1.0
@@ -426,7 +427,7 @@ extension DropDown: UITableViewDelegate {
             touchAction()
             self.endEditing(true)
         }
-        if let selected = optionArray.firstIndex(where: {$0 == selectedText}) {
+        if let selected = optionArray.index(where: {$0 == selectedText}) {
             if let id = optionIds?[selected] {
                 didSelectCompletion(selectedText, selected , id )
             }else{
@@ -437,9 +438,6 @@ extension DropDown: UITableViewDelegate {
 
     }
 }
-
-
-
 
 
 
@@ -530,16 +528,7 @@ extension UIView {
         layer.shouldRasterize = true
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
-    
-    func viewBorder(borderColor : UIColor, borderWidth : CGFloat?) {
-        self.layer.borderColor = borderColor.cgColor
-        if let borderWidth_ = borderWidth {
-            self.layer.borderWidth = borderWidth_
-        } else {
-            self.layer.borderWidth = 1.0
-        }
-    }
-    
+
     var parentViewController: UIViewController? {
         var parentResponder: UIResponder? = self
         while parentResponder != nil {
